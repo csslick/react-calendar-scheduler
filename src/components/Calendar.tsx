@@ -44,6 +44,21 @@ const Calendar = () => {
     });
   };
 
+  const getCalendarInfo = (e:React.MouseEvent<HTMLTableCellElement>) => {
+    const saveKey = `${currentYear}-${currentMonth+1}-${e.currentTarget.innerText}`
+    console.log(saveKey);
+    setSaveKey(saveKey);
+    const res = data.find(item => {
+      return item.id == saveKey
+    })
+    console.log('find item = ', res);
+    if(res) {
+      setTodayData(res);
+    } else {
+      setTodayData(null);
+    }
+  }
+
   return (
     <div className='mt-4'>
       <button className='btn btn-dark' onClick={goToPreviousMonth}>이전달</button>&nbsp;
@@ -67,21 +82,18 @@ const Calendar = () => {
               {Array.from({ length: 7 }).map((_, dayIndex) => {
                 const dayNumber = weekIndex * 7 + dayIndex - firstDay + 1;
                 const isCurrentMonth = dayNumber > 0 && dayNumber <= lastDay;
+                // 달력 날짜와 같은 data 일정(날짜)이 존재하는지 확인
+                const hasSchedule = data.find(item => {
+                  let curDayInfo = `${currentYear}-${currentMonth+1}-${dayNumber}`
+                  return item.id == curDayInfo;
+                })
                 return (
                   <td
+                    // 일정이 있는 날은 스타일 지정
+                    style={hasSchedule && {'background': '#0d6efd', 'color': 'white'}}
                     onClick={(e) => {
-                      const saveKey = `${currentYear}-${currentMonth+1}-${e.currentTarget.innerText}`
-                      console.log(saveKey, dayIndex);
-                      setSaveKey(saveKey);
-                      const res = data.find(item => {
-                        return item.id == saveKey
-                      })
-                      console.log('find item = ', res);
-                      if(res) {
-                        setTodayData(res);
-                      } else {
-                        setTodayData(null);
-                      }
+                      // 선택된 날짜와 일정 조회
+                      getCalendarInfo(e);
                     }} 
                     key={dayIndex} 
                     className={(dayIndex % 6) == 0 ? 'text-red' : ''}>
@@ -133,13 +145,18 @@ const Calendar = () => {
             }} 
             className="btn btn-primary">입력</button>
         </div>
+        <h3 className='mt-4'>전체일정</h3>
+        <ul className='list-group'>
         {
-          data.map((item) => {
+          data.reverse().map((item) => {
             return (
-              <p key={item.id}>{item.id}: {item.content}</p>
+              <li 
+                className='list-group-item' 
+                key={item.id}>{item.id}: {item.content}</li>
             )
           })
         }
+        </ul>
       </div>
       
     </div>
