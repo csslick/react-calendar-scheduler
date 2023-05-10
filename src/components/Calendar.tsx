@@ -7,8 +7,8 @@ const Calendar = () => {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [saveKey, setSaveKey] = useState('');
   const [data, setData] = useState([
-    {id: '2023-5-1', content: '일정 1'},
-    {id: '2023-5-2', content: '일정 2'},
+    {id: '2023-5-1', content: '개강 OT'},
+    {id: '2023-5-10', content: '자바스크립트 기초'},
   ]);
 
   interface DataItem {
