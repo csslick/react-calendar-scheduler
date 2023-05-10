@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react'
+import { RefObject } from 'react'
 
 interface InfoboxProps {
   data: { id: string, content: string }[];
