@@ -4,10 +4,10 @@
   text-align: center;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-gap: 5px;
+.App {
+  background-color: #fff;
+  padding: 0px 30px;
+  width: 90vw;
 }
 
 .text-red {
