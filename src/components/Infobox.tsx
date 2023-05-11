@@ -59,7 +59,19 @@ export default function Infobox(props: InfoboxProps) {
             return (
               <li
                 className='list-group-item'
-                key={item.id}>{item.id}: {item.content}</li>
+                key={item.id}>
+                <span>{item.id}: {item.content}</span>
+                <button 
+                  onClick={()=>{
+                    console.log('delete ', item.id);
+                    let delItem = data.filter(res => {
+                      return item.id !== res.id;
+                    })
+                    let copy = [...delItem];
+                    setData(copy);
+                  }}
+                >삭제</button>
+              </li>
             )
           })
         }
