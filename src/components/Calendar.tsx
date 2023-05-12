@@ -2,11 +2,17 @@ import { useState, useRef, useEffect } from 'react';
 import Infobox from './Infobox';
 
 const Calendar = () => {
+
+  interface DataItem {
+    id: string ;
+    content: string;
+  }
+
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [saveKey, setSaveKey] = useState('');
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<DataItem[]>([]);
 
   // 앱 시작시 DB에서 데이터 가져오기
   useEffect(() => {
@@ -20,12 +26,6 @@ const Calendar = () => {
     console.log('mount2, update');
     localStorage.setItem('calendar', JSON.stringify(data))
   }, [data])
-
-
-  interface DataItem {
-    id: string ;
-    content: string;
-  }
 
   const [todayData, setTodayData] = useState<DataItem | null>(null); 
   // 버튼 상태: 일정이 있으면 true 
@@ -66,7 +66,7 @@ const Calendar = () => {
       setSaveKey(saveKey);
       // 해당 일에 일정이 있나?
       const res = data.find(item => {
-        return item.id == saveKey
+        return item.id == saveKey;
       })
       console.log('find item = ', res);
       // 클릭한 일에 일정이 있으면 저장
