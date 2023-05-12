@@ -12,7 +12,9 @@ const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [saveKey, setSaveKey] = useState('');
-  const [data, setData] = useState<DataItem[]>([]);
+  const [data, setData] = useState<DataItem[]>([{
+    id: '2023-5-1', content: '일정을 추가해보세요'
+  }]);
 
   // 앱 시작시 DB에서 데이터 가져오기
   useEffect(() => {
@@ -24,7 +26,7 @@ const Calendar = () => {
   // DB 업데이트
   useEffect(() => {
     console.log('mount2, update');
-    localStorage.setItem('calendar', JSON.stringify(data))
+    if(data) localStorage.setItem('calendar', JSON.stringify(data))
   }, [data])
 
   const [todayData, setTodayData] = useState<DataItem | null>(null); 
