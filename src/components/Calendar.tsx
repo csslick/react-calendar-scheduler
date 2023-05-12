@@ -17,6 +17,8 @@ const Calendar = () => {
   }
 
   const [todayData, setTodayData] = useState<DataItem | null>(null); 
+  // 버튼 상태: 일정이 있으면 true 
+  const [btnStatus, setBtnStatus] = useState<any>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
@@ -48,15 +50,23 @@ const Calendar = () => {
   const getCalendarInfo = (e:React.MouseEvent<HTMLTableCellElement>) => {
     const saveKey = `${currentYear}-${currentMonth+1}-${e.currentTarget.innerText}`
     console.log(saveKey);
-    setSaveKey(saveKey);
-    const res = data.find(item => {
-      return item.id == saveKey
-    })
-    console.log('find item = ', res);
-    if(res) {
-      setTodayData(res);
-    } else {
-      setTodayData(null);
+    // 빈 날짜가 아니면(달력을 올바르게 클릭했는지 채크)
+    if(e.currentTarget.innerText) {
+      setSaveKey(saveKey);
+      // 해당 일에 일정이 있나?
+      const res = data.find(item => {
+        return item.id == saveKey
+      })
+      console.log('find item = ', res);
+      // 클릭한 일에 일정이 있으면 저장
+      if(res) {
+        setTodayData(res);
+        // 버튼 상태: 입력 | 수정
+        setBtnStatus(true);
+      } else {
+        setTodayData(null);
+        setBtnStatus(false);
+      }
     }
   }
 
@@ -69,13 +79,13 @@ const Calendar = () => {
         <caption>{currentYear}년 <b>{currentMonth + 1}월</b></caption>
         <thead>
           <tr>
-            <th>Sun</th>
-            <th>Mon</th>
-            <th>Tue</th>
-            <th>Wed</th>
-            <th>Thu</th>
-            <th>Fri</th>
-            <th>Sat</th>
+            <th>일</th>
+            <th>월</th>
+            <th>화</th>
+            <th>수</th>
+            <th>목</th>
+            <th>금</th>
+            <th>토</th>
           </tr>
         </thead>
         <tbody>
@@ -114,7 +124,10 @@ const Calendar = () => {
         setTodayData={setTodayData as any} 
         saveKey={saveKey} 
         todayData={todayData} 
-        inputRef={inputRef} />
+        inputRef={inputRef}
+        btnStatus={btnStatus} 
+        setBtnStatus={setBtnStatus}
+      />
       
     </div>
   );

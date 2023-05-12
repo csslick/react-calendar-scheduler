@@ -3,14 +3,24 @@ import { RefObject } from 'react'
 interface InfoboxProps {
   data: { id: string, content: string }[];
   setData: (data: { id: string, content: string }[]) => void;
-  setTodayData: (data: { id: string, content: string | undefined} | null) => void;
+  setTodayData: (data: { id: string, content: string } | null) => void;
   saveKey: string;
   todayData: { id: string, content: string } | null;
   inputRef: RefObject<HTMLInputElement>;
+  btnStatus: boolean | undefined;
+  setBtnStatus: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }
 
 export default function Infobox(props: InfoboxProps) {
-  const { data, setData, setTodayData, saveKey, todayData, inputRef } = props;
+  const { 
+    data, 
+    setData, 
+    setTodayData, 
+    saveKey, 
+    todayData, 
+    inputRef, 
+    btnStatus, 
+  } = props;
 
   return (
     <div className='info-box border p-3'>
@@ -21,8 +31,11 @@ export default function Infobox(props: InfoboxProps) {
           ref={inputRef}
           className="form-control"
           type="text" placeholder='여기에 일정 입력' />
-        <button
-          onClick={() => {
+        {
+          // 일정이 있으면 수정 아니면 입력 버튼
+          !btnStatus ? 
+          <button
+            onClick={() => {
             // 날짜 선택 확인
             if (saveKey) {
               // 입력 확인
@@ -41,7 +54,7 @@ export default function Infobox(props: InfoboxProps) {
                   // 스케쥴 표시 업데이트
                   setTodayData({
                     id: saveKey,
-                    content: inputRef.current?.value
+                    content: inputRef.current?.value || ""
                   });
                 }
                 console.log('isSameData = ', isSameData)
@@ -50,18 +63,36 @@ export default function Infobox(props: InfoboxProps) {
               alert('날짜를 선택해주세요')
             }
           }}
-          className="btn btn-primary">입력</button>
+          className="btn btn-primary">입력</button> :
+          <button 
+            onClick={()=> {
+              console.log('수정:', saveKey);
+              const updateData = data.map(item => {
+                if(item.id == saveKey) {
+                  // 값이 있을 때만 수정
+                  if(inputRef.current?.value) {
+                    item.content = inputRef.current?.value;
+                  }
+                }
+                return item;
+              })
+              setData(updateData);
+            }}
+            className="btn btn-warning">수정</button>
+        }  
+
       </div>
       <h3 className='mt-4'>전체일정</h3>
       <ul className='list-group'>
         {
-          data.reverse().map((item:{id:string, content:string}) => {
+          data.map((item) => {
             return (
               <li
                 className='list-group-item'
                 key={item.id}>
                 <span>{item.id}: {item.content}</span>
                 <button 
+                  className='btn btn-danger ms-2'
                   onClick={()=>{
                     console.log('delete ', item.id);
                     let delItem = data.filter(res => {
