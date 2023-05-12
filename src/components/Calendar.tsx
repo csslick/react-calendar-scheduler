@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Infobox from './Infobox';
 
 const Calendar = () => {
@@ -6,10 +6,21 @@ const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [saveKey, setSaveKey] = useState('');
-  const [data, setData] = useState([
-    {id: '2023-5-1', content: '개강 OT'},
-    {id: '2023-5-10', content: '자바스크립트 기초'},
-  ]);
+  const [data, setData] = useState([]);
+
+  // 앱 시작시 DB에서 데이터 가져오기
+  useEffect(() => {
+    console.log('mount1')
+    const isData = localStorage.getItem('calendar');
+    if(isData) setData(JSON.parse(isData));
+  }, [])
+
+  // DB 업데이트
+  useEffect(() => {
+    console.log('mount2, update');
+    localStorage.setItem('calendar', JSON.stringify(data))
+  }, [data])
+
 
   interface DataItem {
     id: string ;
