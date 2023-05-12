@@ -16,3 +16,4 @@ demo: https://react-calendar-scheduler-gjut.vercel.app/
 ## 이슈
   - [x] 달력 빈 영역을 클릭시 예외 처리
   - [ ] 목록의 내림차순 정렬
+  - [ ] 클릭한 셀의 선택 효과. 다른 영역 클릭 시 해제
